@@ -7,11 +7,20 @@ const { encrypt, decrypt } = require("../utils/encryption");
 const zxcvbn = require("zxcvbn");
 
 // ===========================
-// ADD PASSWORD - COMPLETE
+// ADD PASSWORD
 // ===========================
 router.post("/add", authMiddleware, async (req, res) => {
   try {
     const { website, username, password } = req.body;
+
+    // added new
+    const urlPattern = /^https?:\/\/.+/i;
+    if (!urlPattern.test(website)) {
+      return res.status(400).json({ 
+        error: "Full URL required (https://example.com)" 
+      });
+    }
+    
     if (!website || !username || !password) {
       return res.status(400).json({ error: "All fields are required" });
     }
